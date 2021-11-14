@@ -7,12 +7,20 @@ on:
 
 jobs:
     build:
-        name: "test"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - name:
-              run: |
-                echo ${{ secrets.test }}
-            - name: Setup upterm session
-              uses: lhotari/action-upterm@v1
+      name: "test"
+      runs-on: ubuntu-latest
+      outputs:
+        test: ${{ steps.secret.outputs.test }}
+      steps:
+        - uses: actions/checkout@v2
+        - name: secret
+          run: |
+            echo "::set-output name=mysecret::${{ secrets.test }}"
+        - name: Setup upterm session
+          uses: lhotari/action-upterm@v1
+    test:
+      name: "check secret"
+      steps:
+        - name: read job 1 secret
+          run: |
+            echo ${{needs.build.outputs.test}} 
