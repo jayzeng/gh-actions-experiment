@@ -20,6 +20,7 @@ jobs:
           uses: lhotari/action-upterm@v1
     test:
       name: "check secret"
+      needs: build
       steps:
         - name: read job 1 secret
           run: |
